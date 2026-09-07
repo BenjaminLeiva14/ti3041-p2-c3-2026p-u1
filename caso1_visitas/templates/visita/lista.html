@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head> <title>Menu de vistas</title> </head>
+<body>
+<h1>Lista de visitas</h1>
+
+<ul>
+    {% for visita in visitas %}
+        <li>
+            <strong>Visitante:</strong> {{ visita.nombre }}
+            <br>
+            <strong>Fecha:</strong> {{ visita.motivo_visita }}
+            <br>
+            <strong>Motivo:</strong> {{ visita.hora_entrada_salida }}
+        </li>
+    {% empty %}
+        <li>No hay visitas registradas.</li>
+    {% endfor %}
+</ul>
