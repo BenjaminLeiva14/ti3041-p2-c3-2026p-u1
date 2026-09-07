@@ -3,4 +3,5 @@ from .models import Visita
 
 def visita_list(request):
  visitas = Visita.objects.all()
- return render(request, 'visita/lista.html', {'visitas': visitas})
+ return render(request, 'visita/lista_visita.html', {'visitas': visitas})
+    
