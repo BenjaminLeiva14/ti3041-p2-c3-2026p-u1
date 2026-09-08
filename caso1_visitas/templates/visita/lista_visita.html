@@ -4,46 +4,47 @@
 
 {% block content %}
 <section class="animate-[fade-in_.6s_ease-out]">
-    <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-end">
         <div>
-            <p class="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-teal-700">Control de acceso</p>
-            <h1 class="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">Visitas de hoy</h1>
-            <p class="mt-3 max-w-xl text-slate-600">Consulta las personas que han ingresado a la empresa y el motivo de su visita.</p>
+            <div class="mb-4 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-orange-700"><span class="h-px w-10 bg-orange-600"></span>Libro de recepción</div>
+            <h1 class="max-w-3xl text-4xl font-black leading-none tracking-tight text-stone-950 sm:text-6xl">Quién está dentro hoy<span class="text-orange-600">?</span></h1>
+            <p class="mt-5 max-w-xl leading-7 text-stone-600">Revisa el movimiento de acceso y encuentra rápidamente los datos de cada visitante.</p>
         </div>
-        <div class="rounded-2xl border border-white/80 bg-white/70 px-5 py-3 text-right shadow-sm backdrop-blur">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Registros</p>
-            <p class="text-2xl font-black text-slate-950">{{ visitas|length }}</p>
+        <div class="relative overflow-hidden border-l-4 border-orange-600 bg-stone-950 px-5 py-5 text-orange-50 shadow-xl shadow-orange-950/10">
+            <span class="absolute -right-4 -top-5 size-20 rounded-full border-[10px] border-orange-500/20"></span>
+            <p class="relative text-xs font-bold uppercase tracking-wider text-orange-300">Total registrados</p>
+            <p class="relative mt-1 text-5xl font-black">{{ object_list|length }}</p>
+            <p class="relative mt-2 text-xs text-stone-400">Personas en el libro</p>
         </div>
     </div>
 
-    <div class="overflow-hidden rounded-[1.25rem] border border-white/80 bg-white/80 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-        <div class="hidden grid-cols-[1.4fr_1fr_2fr_1fr] gap-4 border-b border-slate-200/80 bg-slate-50/80 px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 sm:grid">
-            <span>Visitante</span><span>RUT</span><span>Motivo</span><span>Hora</span>
-        </div>
-        <div class="divide-y divide-slate-200/80">
-            {% for visita in visitas %}
-                <article class="grid gap-3 px-6 py-5 transition hover:bg-teal-50/50 sm:grid-cols-[1.4fr_1fr_2fr_1fr] sm:items-center sm:gap-4">
-                    <div>
-                        <p class="text-xs font-bold uppercase tracking-wider text-teal-700 sm:hidden">Visitante</p>
-                        <p class="font-bold text-slate-950">{{ visita.nombre }}</p>
+    <div class="mt-10 flex items-center justify-between border-b-2 border-stone-950 pb-3"><h2 class="text-lg font-black text-stone-950">Movimiento reciente</h2><span class="text-xs font-bold uppercase tracking-wider text-stone-500">Detalle de acceso</span></div>
+    <div class="mt-4 space-y-3">
+            {% for visita in object_list %}
+                <article class="group relative grid gap-4 border border-orange-100 bg-white/80 p-5 shadow-[6px_6px_0_rgba(251,146,60,0.12)] transition hover:-translate-y-0.5 hover:border-orange-300 sm:grid-cols-[minmax(13rem,1.3fr)_minmax(8rem,.8fr)_minmax(14rem,2fr)_auto] sm:items-center sm:px-6">
+                    <div class="absolute bottom-0 left-0 top-0 w-1 bg-orange-500 opacity-0 transition group-hover:opacity-100"></div>
+                    <div class="flex items-center justify-between gap-4 sm:block sm:text-right">
+                        <p class="text-xs font-bold uppercase tracking-wider text-orange-700 sm:hidden">Visitante</p>
+                        <p class="font-bold text-stone-950">{{ visita.nombre }}</p>
                     </div>
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-wider text-teal-700 sm:hidden">RUT</p>
-                        <p class="text-slate-600">{{ visita.rut }}</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-orange-700 sm:hidden">RUT</p>
+                        <p class="text-stone-600">{{ visita.rut }}</p>
                     </div>
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-wider text-teal-700 sm:hidden">Motivo</p>
-                        <p class="text-slate-600">{{ visita.motivo_visita }}</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-orange-700 sm:hidden">Motivo</p>
+                        <p class="text-stone-600">{% if visita.motivo_visita %}{{ visita.motivo_visita }}{% else %}Sin motivo informado{% endif %}</p>
                     </div>
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-wider text-teal-700 sm:hidden">Hora</p>
-                        <p class="font-semibold text-slate-800">{{ visita.hora_entrada_salida|time:"H:i" }}</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-orange-700 sm:hidden">Hora</p>
+                        <p class="font-semibold text-stone-800">{{ visita.hora_entrada|date:"d/m/Y H:i" }}</p>
+                        <a href="{% url 'visita_detail' visita.pk %}" class="mt-3 inline-block text-sm font-bold text-orange-700 hover:text-orange-950">Abrir ficha →</a>
                     </div>
                 </article>
             {% empty %}
-                <div class="px-6 py-16 text-center">
-                    <p class="text-lg font-bold text-slate-900">No hay visitas registradas.</p>
-                    <p class="mt-2 text-slate-500">La recepción todavía no tiene registros para mostrar.</p>
+                <div class="border border-dashed border-orange-300 bg-orange-50/50 px-6 py-16 text-center">
+                    <p class="text-lg font-bold text-stone-900">No hay visitas registradas.</p>
+                    <p class="mt-2 text-stone-500">La recepción todavía no tiene registros para mostrar.</p><a href="{% url 'visita_create' %}" class="mt-5 inline-block font-bold text-orange-700 hover:text-orange-950">Registrar la primera visita →</a>
                 </div>
             {% endfor %}
         </div>

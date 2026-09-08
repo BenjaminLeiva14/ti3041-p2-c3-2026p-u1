@@ -1,0 +1,33 @@
+{% extends 'visita/base.html' %}
+{% block title %}{% if form.instance.pk %}Editar visita{% else %}Nueva visita{% endif %} | Recepción{% endblock %}
+{% block content %}
+<section class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[.8fr_1.35fr] lg:items-start" aria-labelledby="titulo-visita">
+  <div class="lg:sticky lg:top-8">
+    <a href="{% url 'visita_list' %}" class="text-sm font-bold text-orange-800 hover:text-orange-950">← Volver al libro</a>
+    <div class="mt-8 border-l-4 border-orange-600 pl-5">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-orange-700">Ficha de ingreso</p>
+      <h1 id="titulo-visita" class="mt-3 text-4xl font-black leading-tight text-stone-950">{% if form.instance.pk %}Editar datos{% else %}Registrar una visita{% endif %}</h1>
+      <p class="mt-4 leading-7 text-stone-600">Un registro claro ayuda a mantener el acceso ordenado y visible para el equipo de recepción.</p>
+    </div>
+    <div class="mt-8 hidden border-t border-orange-200 pt-5 text-sm text-stone-500 sm:block"><p class="font-bold text-stone-800">Antes de guardar</p><p class="mt-2">Comprueba que el RUT y la hora de entrada sean correctos.</p></div>
+  </div>
+  <form method="post" class="border border-orange-100 bg-white/90 p-6 shadow-[10px_10px_0_rgba(251,146,60,0.13)] sm:p-8">{% csrf_token %}
+    {% if form.errors %}<div class="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">Revisa los campos marcados antes de continuar.</div>{% endif %}
+    {% if form.non_field_errors %}<div class="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="space-y-5">
+      {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-semibold text-stone-800">{{ field.label }}{% if field.field.required %} <span class="text-orange-700" aria-hidden="true">*</span>{% endif %}</label>
+        {{ field }}
+        {% if field.help_text %}<p class="mt-1 text-xs text-stone-500">{{ field.help_text }}</p>{% endif %}
+        {% if field.errors %}<p class="mt-2 text-sm font-medium text-red-700">{{ field.errors|striptags }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mt-8 flex flex-wrap-reverse items-center justify-between gap-3 border-t border-orange-100 pt-5">
+      <a href="{% url 'visita_list' %}" class="inline-flex min-h-11 items-center px-3 text-sm font-semibold text-stone-700 hover:text-stone-950">Cancelar</a>
+      <button type="submit" class="inline-flex min-h-11 items-center gap-2 rounded-xl bg-orange-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-700">Guardar visita</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
