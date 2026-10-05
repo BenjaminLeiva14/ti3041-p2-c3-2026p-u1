@@ -10,9 +10,31 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='visita',
-            name='hora_entrada',
-            field=models.DateTimeField(),
+        migrations.SeparateDatabaseAndState(
+            database_operations=[
+                migrations.RunSQL(
+                    sql='''
+                        ALTER TABLE "caso1_visitas_visita"
+                        ALTER COLUMN "hora_entrada" TYPE timestamp with time zone
+                        USING (
+                            (CURRENT_DATE + "hora_entrada") AT TIME ZONE 'UTC'
+                        )
+                    ''',
+                    reverse_sql='''
+                        ALTER TABLE "caso1_visitas_visita"
+                        ALTER COLUMN "hora_entrada" TYPE time without time zone
+                        USING (
+                            ("hora_entrada" AT TIME ZONE 'UTC')::time
+                        )
+                    ''',
+                ),
+            ],
+            state_operations=[
+                migrations.AlterField(
+                    model_name='visita',
+                    name='hora_entrada',
+                    field=models.DateTimeField(),
+                ),
+            ],
         ),
     ]
