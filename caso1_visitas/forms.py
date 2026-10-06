@@ -10,7 +10,7 @@ class VisitaForm(forms.ModelForm):
     )
     class Meta:
         model = Visita
-        fields = ['nombre', 'rut', 'motivo_visita', 'hora_entrada']
+        fields = ['nombre', 'rut', 'motivo_visita', 'fecha', 'hora_entrada']
         widgets = {
             'nombre': forms.TextInput(attrs={
                 'class': 'w-full rounded-xl border border-orange-200 bg-white/80 px-3 py-2.5 text-stone-950 shadow-sm outline-none transition duration-200 placeholder:text-stone-400 hover:border-orange-300 focus:border-orange-600 focus:bg-white focus:ring-4 focus:ring-orange-100',
@@ -29,6 +29,10 @@ class VisitaForm(forms.ModelForm):
                 'class': 'min-h-28 w-full resize-y rounded-xl border border-orange-200 bg-white/80 px-3 py-2.5 text-stone-950 shadow-sm outline-none transition duration-200 placeholder:text-stone-400 hover:border-orange-300 focus:border-orange-600 focus:bg-white focus:ring-4 focus:ring-orange-100',
                 'placeholder': 'Describe el motivo de la visita',
                 'rows': 4,
+            }),
+            'fecha': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'w-full rounded-xl border border-orange-200 bg-white/80 px-3 py-2.5 text-stone-950 shadow-sm outline-none transition duration-200 hover:border-orange-300 focus:border-orange-600 focus:bg-white focus:ring-4 focus:ring-orange-100',
             }),
             'hora_entrada': forms.DateTimeInput(attrs={
                 'type': 'datetime-local',

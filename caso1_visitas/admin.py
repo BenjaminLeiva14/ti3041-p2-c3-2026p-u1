@@ -1,10 +1,11 @@
 from django.contrib import admin
 from .models import Visita
 
-# Register your models here.
-
+@admin.register(Visita)
 class VisitaAdmin(admin.ModelAdmin):
-    search_fields = ["nombre"]
-    ordering = ["nombre"]
-
-admin.site.register(model_or_iterable=Visita, admin_class=VisitaAdmin)
+    list_display = ("nombre", "rut", "motivo_visita", "fecha", "hora_entrada")
+    search_fields = ("nombre", "motivo_visita", "rut__exact")
+    list_filter = ("fecha",)
+    ordering = ("-fecha", "-hora_entrada")
+    list_per_page = 25
+    autocomplete_fields = () 

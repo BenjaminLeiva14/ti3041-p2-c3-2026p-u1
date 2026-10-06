@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from datetime import datetime, timedelta
+from datetime import date
 
 # Create your models here.
 class Visita(models.Model):
@@ -13,5 +13,6 @@ class Visita(models.Model):
         ],
     )
     motivo_visita = models.CharField(max_length=320)
+    fecha = models.DateField(default=date.today, verbose_name="Fecha")
     hora_entrada = models.DateTimeField()
     
